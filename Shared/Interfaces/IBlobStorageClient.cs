@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="blob">Blob to be uploaded</param>
         /// <returns></returns>
-        bool UploadBlob(Blob blob);
+        BlobResponse UploadBlob(Blob blob);
 
         /// <summary>
         /// Downloads a blob from the blob storage. Blob stream and metadata is set in the passed in blob parameter
