@@ -66,6 +66,8 @@ namespace AzureStorageClient
         /// <returns></returns>
         public bool UploadBlob(Blob blob)
         {
+            try
+            {
             // 4. Get access to container
             CloudBlobContainer blobContainer = _azureBlobClient.GetContainerReference(blob.ContainerName);
 
@@ -89,7 +91,19 @@ namespace AzureStorageClient
             {
                 blockBlob.UploadFromStream(fileStream);
             }
-            return true;
+            blobResponse.IsSuccess = true;
+                blobResponse.BlobUri = new BlobUri
+                {
+                    PrimaryUri = blockBlob.StorageUri.PrimaryUri.ToString(),
+                    SecondaryUri = blockBlob.StorageUri.SecondaryUri.ToString()
+                };
+            }
+            catch (Exception exObj)
+            {
+                blobResponse.IsSuccess = false;
+                blobResponse.FailureMessage = exObj.Message;
+            }
+            return blobResponse;
         }
 
 
