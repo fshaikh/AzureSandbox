@@ -85,7 +85,7 @@ namespace Shared
     {
         public bool IsSuccess { get; set; }
         public string FailureMessage { get; set; }
-        public BlobUri BlobUri { get; set; }
+        public Blob Blob { get; set; }
     }
     
      public class BlobUri
