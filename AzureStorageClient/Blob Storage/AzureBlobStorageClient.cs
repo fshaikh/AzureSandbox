@@ -92,12 +92,14 @@ namespace AzureStorageClient
                 blockBlob.UploadFromStream(fileStream);
             }
             blobResponse.IsSuccess = true;
-                blobResponse.BlobUri = new BlobUri
+                BlobUri blobUri = new BlobUri
                 {
                     PrimaryUri = blockBlob.StorageUri.PrimaryUri.ToString(),
                     SecondaryUri = blockBlob.StorageUri.SecondaryUri.ToString()
                 };
-            }
+                blob.BlobUri = blobUri;
+
+                blobResponse.Blob = blob;
             catch (Exception exObj)
             {
                 blobResponse.IsSuccess = false;
