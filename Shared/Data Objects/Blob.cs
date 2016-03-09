@@ -53,6 +53,8 @@ namespace Shared
         /// Gets/Sets the blob byte array
         /// </summary>
         public byte[] BlobData { get; set; }
+        
+        public BlobUri BlobUri { get; set; }
     }   
 
     public class AcessToken
