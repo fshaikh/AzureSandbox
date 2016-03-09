@@ -48,6 +48,11 @@ namespace Shared
         public BlobMetadata Metadata { get; set; }
 
         public string ContentType { get; set; }
+        
+         /// <summary>
+        /// Gets/Sets the blob byte array
+        /// </summary>
+        public byte[] BlobData { get; set; }
     }   
 
     public class AcessToken
@@ -69,5 +74,21 @@ namespace Shared
         public int ExpiryHours { get; set; }
         public Permission Permissions { get; set; }
 
+    }
+    
+     /// <summary>
+    /// This class represents a blob response
+    /// </summary>
+    public class BlobResponse
+    {
+        public bool IsSuccess { get; set; }
+        public string FailureMessage { get; set; }
+        public BlobUri BlobUri { get; set; }
+    }
+    
+     public class BlobUri
+    {
+        public string PrimaryUri { get; set; }
+        public string SecondaryUri { get; set; }
     }
 }
