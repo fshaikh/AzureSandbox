@@ -64,34 +64,35 @@ namespace AzureStorageClient
         /// </summary>
         /// <param name="blob">Blob to be uploaded</param>
         /// <returns></returns>
-        public bool UploadBlob(Blob blob)
+        public BlobResponse UploadBlob(Blob blob)
         {
+            BlobResponse blobResponse = new BlobResponse();
             try
             {
-            // 4. Get access to container
-            CloudBlobContainer blobContainer = _azureBlobClient.GetContainerReference(blob.ContainerName);
+                // 4. Get access to container
+                CloudBlobContainer blobContainer = _azureBlobClient.GetContainerReference(blob.ContainerName);
 
-            // 5. Upload blob
-            CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(blob.BlobName);
+                // 5. Upload blob
+                CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(blob.BlobName);
 
-            // 6. Set blob metadata
-            SetBlobMetadata(blob,blockBlob);
+                // 6. Set blob metadata
+                SetBlobMetadata(blob, blockBlob);
 
-            // Set Request options
-            BlobRequestOptions blobRequestOptions = new BlobRequestOptions
-            {
-                ParallelOperationThreadCount = 2,
-                SingleBlobUploadThresholdInBytes = 1024 * 1024 // 1 MB If blob size < 1 MB, upload as a single file. If blob size  > 1 MB, chunk into blocks
-            };
-            blockBlob.StreamWriteSizeInBytes = 1024 * 1024;
+                // Set Request options
+                BlobRequestOptions blobRequestOptions = new BlobRequestOptions
+                {
+                    ParallelOperationThreadCount = 2,
+                    SingleBlobUploadThresholdInBytes = 1024 * 1024 // 1 MB If blob size < 1 MB, upload as a single file. If blob size  > 1 MB, chunk into blocks
+                };
+                blockBlob.StreamWriteSizeInBytes = 1024 * 1024;
 
-            _azureBlobClient.DefaultRequestOptions = blobRequestOptions;
+                _azureBlobClient.DefaultRequestOptions = blobRequestOptions;
 
-            using (FileStream fileStream = new FileStream(blob.FilePath, FileMode.Open))
-            {
-                blockBlob.UploadFromStream(fileStream);
-            }
-            blobResponse.IsSuccess = true;
+                using (FileStream fileStream = new FileStream(blob.FilePath, FileMode.Open))
+                {
+                    blockBlob.UploadFromStream(fileStream);
+                }
+                blobResponse.IsSuccess = true;
                 BlobUri blobUri = new BlobUri
                 {
                     PrimaryUri = blockBlob.StorageUri.PrimaryUri.ToString(),
@@ -100,6 +101,7 @@ namespace AzureStorageClient
                 blob.BlobUri = blobUri;
 
                 blobResponse.Blob = blob;
+            }
             catch (Exception exObj)
             {
                 blobResponse.IsSuccess = false;
